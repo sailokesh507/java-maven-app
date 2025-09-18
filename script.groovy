@@ -1,19 +1,25 @@
 def buildJar() {
-    echo 'building the application...'
-    sh 'mvn package'
+    echo 'Building the Maven application...'
+    sh 'mvn clean package'
 }
 
 def buildImage() {
-    echo "building the docker image..."
-   withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh 'docker build -t lokesh537/docker:jma-3.0 .'
-                        sh 'echo $PASS | docker login -u $USER --password-stdin'
-                        sh 'docker push lokesh537/docker:jma-3.0''
+    echo "Building Docker image..."
+    // Get short Git commit hash for tagging
+    def commitHash = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+
+    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+        sh """
+            docker build -t lokesh537/docker:${commitHash} .
+            echo \$PASS | docker login -u \$USER --password-stdin
+            docker push lokesh537/docker:${commitHash}
+        """
     }
 }
 
 def deployApp() {
-    echo 'deploying the application...'
+    echo 'Deploying the application...'
+    // Add your deployment commands here (e.g., SSH to server, docker run, docker-compose)
 }
 
 return this
