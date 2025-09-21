@@ -1,0 +1,37 @@
+pipeline{
+agent any
+stages{
+stage("test"){
+steps{
+script{
+echo "test the app"
+echo "executing pipeline for branch $BRANCH_NAME"
+}
+}
+}
+stage("build"){
+when{
+expression{
+BRANCH_NAME=="master"
+}
+}
+steps{
+script{
+echo "building the app"
+}
+}
+}
+stage("deploy"){
+when{
+expression{
+BRANCH_NAME=="master"
+}
+}
+steps{
+script{
+echo "deploy the app"
+}
+}
+}
+}
+}
