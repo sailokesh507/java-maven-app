@@ -17,7 +17,7 @@ pipeline{
         stage("build jar"){
             steps{
                 script{
-                    buildJar()
+                    buildJar() 'lokesh537/docker:jma-3.4'
                 }
             }
         }
