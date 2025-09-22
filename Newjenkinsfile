@@ -1,45 +1,28 @@
-#!/user/bin/env groovy
-library identifier: 'jenkins-shared-library@master', retriever: modernSCM(
-        [$class: 'GitSCMSource',
-        remote: 'https://github.com/sailokesh507/jenkins-shared-library.git',
-        credentialsId: 'git'])
-def gv
-pipeline{
+pipeline {   
     agent any
-    tools{
-        maven 'maven-3.9'
-    }
-    stages{
-        stage("init"){
-            steps{
-                script{
-                    gv = load "script.groovy"
+    stages {
+        stage("test") {
+            steps {
+                script {
+                    echo "Testing the application...."
                 }
             }
         }
-        stage("build jar"){
-            steps{
-                script{
-                    buildJar() 
-                }
-            }
-        }
-        stage("build image and push"){
-            steps{
-                script{
-                    buildImage('lokesh537/docker:jma-3.4')
-                    dockerLogin()
-                    dockerPush('lokesh537/docker:jma-3.4')
+        
+        stage("build") {
+            steps {
+                script {
+                    echo "Building the application...."
                 }
             }
         }
 
-        stage("deploy"){
-            steps{
-                script{
-                    gv.deployApp()
+        stage("deploy") {
+            steps {
+                script {
+                    echo "Deploying the application...."
                 }
             }
-        }
+        }               
     }
 }
