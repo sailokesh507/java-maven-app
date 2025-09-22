@@ -25,10 +25,12 @@ pipeline{
                 }
             }
         }
-        stage("build image"){
+        stage("build image and push"){
             steps{
                 script{
                     buildImage('lokesh537/docker:jma-3.4')
+                    dockerLogin()
+                    dockerPush('lokesh537/docker:jma-3.4')
                 }
             }
         }
